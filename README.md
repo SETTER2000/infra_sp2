@@ -45,6 +45,9 @@ git clone git@github.com:SETTER2000/infra_sp2.git
 
 
 ```
+cd infra_sp2 
+```
+```
 docker-compose up -d --build
 ```
 
