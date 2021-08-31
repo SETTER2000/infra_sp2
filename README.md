@@ -26,37 +26,89 @@ _Документация по API будет доступна после уст
 
 
 ## Install
+Предварительно установить Docker:
 
-Чтобы запустить приложение, выполните следующие команды:
+<a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04-ru">Ubuntu 20.04</a>
+
+<a href="https://docs.docker.com/desktop/windows/install/">Windows 10</a>
 
 ### Запуск проекта
-- *Установите и активируйте виртуальное окружение*
-- Установите зависимости из файла requirements.txt
+
+- Клонировать репозиторий
+
+```
+git clone git@github.com:SETTER2000/infra_sp2.git
+```
+
+- Запускаем сервисы 
 
 
 ```
-python3 manage.py runserver
+docker-compose up -d --build
 ```
 
-- В папке с файлом manage.py выполните команду:
+- Создаём структуру приложения в DB:
 
 ```
-python3 manage.py runserver
+docker-compose exec web python manage.py makemigrations --noinput
 ```
 
-- В папке с файлом manage.py выполните команду:
-
 ```
-python3 manage.py runserver
+docker-compose exec web python manage.py migrate --noinput
 ```
 
-- В папке с файлом manage.py выполните команду:
+- Добавляем статику:
 
 ```
-python3 manage.py runserver
+docker-compose exec web python manage.py collectstatic --no-input
 ```
-### Это тоже заголовок, самый маленький
-``` Этот текст будет выглядеть как код. ```
+
+- Добавляем тестовые данные в DB и superuser:
+
+```
+docker-compose exec web python manage.py loaddata fixtures.json
+```
+## Использование
+После удачного выполнения всех команд выше, станет доступна 
+административная часть и ваш API готов к приёму запросов.
+
+- Админка
+```
+<your domain>/admin
+```
+
+- Login
+```.env
+admin   
+```
+
+- Password
+```.env
+123123
+```
+
+### Авторизация
+Для использования API нужен токен
+
+- Нужно получить токен для вашего email, который уже зарегистрирован в этом 
+API. Зарегистрировать пользователя может superuser (по умолчанию admin), в 
+административной 
+панеле зарегистрировав нужного пользователя. Либо тоже самое superuser может
+ сделать используя API (/redoc - раздел документации USERS)
+
+- После регистрации пользователя сделать запрос на получения токена 
+(/redoc - раздел документации AUTH)
+
+## Подводные камни
+При уставновке могут возникнуть обстоятельства при которых вы не сможете 
+запустить приложение смотрите следующие варианты исправления:
+
+- В Ubuntu у вас может быть занять 80 порт, например службой apache2. 
+Остановить её можно командой
+```.env
+sudo systemctl stop apache2
+``` 
+
 
 ### Авторы
 Александр, Павел и Александр 
