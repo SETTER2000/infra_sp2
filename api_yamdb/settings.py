@@ -11,7 +11,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "DEFAULT")
 
 DEFAULT_FROM_EMAIL = "admin@example.com"
 
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 
